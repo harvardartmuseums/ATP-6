@@ -4,6 +4,9 @@ const forest = (sketch) => {
     let snapshotFilename = 'forest-snapshot';
     const trees = [];
 
+    let backgroundColor1 = sketch.color('#111111');
+    let backgroundColor2 = sketch.color('#323232');
+
     sketch.preload = () => {
     }
 
@@ -24,6 +27,8 @@ const forest = (sketch) => {
     sketch.draw = () => {
         sketch.clear();
 
+        sketch.drawGround(0, sketch.windowHeight/2, sketch.windowWidth, sketch.windowHeight/2, backgroundColor1, backgroundColor2);
+
         for (let tree of trees) {
             tree.update();
             if (tree.isAlive) {
@@ -31,6 +36,19 @@ const forest = (sketch) => {
             }
         }
     }
+
+    sketch.drawGround = (x, y, w, h, c1, c2) => {
+        sketch.noFill();
+
+        // Top to bottom gradient
+        for (let i = y; i <= y + h; i++) {
+            let inter = sketch.map(i, y, y + h, 0, 1);
+            let c = sketch.lerpColor(c1, c2, inter);
+            sketch.stroke(c);
+            sketch.line(x, i, x + w, i);
+        }
+    }
+      
 
     sketch.drawTree = (data) => {
         xPos = sketch.random(0,sketch.windowWidth);
