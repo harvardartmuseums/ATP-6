@@ -26,7 +26,7 @@ class SpaceTime {
         this.origin = {x: 0, y: 0};
         this.counter = 0;
         this.threshold = 3;
-        this.multiplier = 3;
+        this.multiplier = 2;
         this.speed = 1;
         this.ringScaleFactor = 100;
         this.planetScaleFactor = 25;        
@@ -97,6 +97,8 @@ class SpaceTime {
 
         const data = await d3.json(query);
         if (data) {
+
+            let x = this._getRandomInt(0, this.width);
             // scrub and adjust the incoming data as needed
             // start building the visualization
             let system = this.container.selectAll(".systems")
@@ -106,7 +108,7 @@ class SpaceTime {
                             .attr("data-age", this.counter)
                             .attr("data-source", data.records[0].source)
                             .attr("class", "system")
-                            .attr("transform", d => `translate(${this.origin.x}, ${this.origin.y+250})`);
+                            .attr("transform", d => `translate(${x}, ${this.origin.y+250})`);
 
             let entity = system.selectAll("g")
                             .data(data.records[0].colors)
