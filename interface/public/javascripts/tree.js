@@ -5,8 +5,8 @@ class Tree {
         this.ready = false;
 
         this.position = sketch.createVector(x, y);
-        this.size = 0;
-        this.fullSize = size;
+        this.currentSize = 0;
+        this.maxSize = size;
         this.thickness = size/10;
         this.leafImageURL = data.leaf;
         this.branchImageURL = data.branch;
@@ -14,7 +14,7 @@ class Tree {
         this.rotationFactor = sketch.random(30.0, 65.0);
         this.theta = 0.0;
         this.angleOfMovement = 0.0;
-        this.lifeSpan = 0;
+        this.currentAge = 0;
         this.maximumAge = 0;
         this.isAlive = false;
         this.data;
@@ -58,7 +58,7 @@ class Tree {
           this._createBranch(h, t);       // Ok, now call myself to draw two new branches!!
           this._sketch.pop();     // Whenever we get back here, we "pop" in order to restore the previous matrix state
           
-          if (h < (this.size*0.66)*0.66) {
+          if (h < (this.currentSize*0.66)*0.66) {
             this._sketch.push();
             this._sketch.rotate(this.theta);
             this._sketch.translate(0, -h);
@@ -74,7 +74,7 @@ class Tree {
           this._createBranch(h, t);
           this._sketch.pop();      
           
-          if (h < (this.size*0.66)*0.66) {
+          if (h < (this.currentSize*0.66)*0.66) {
             this._sketch.push();
             this._sketch.rotate(-this.theta/this.lean);
             this._sketch.translate(0, -h);
@@ -86,22 +86,22 @@ class Tree {
 
     update() {
         if (this.ready) {
-            this.lifeSpan +=0.5;
+            this.currentAge +=0.5;
             
             // This controls the pace of spread
-            this.angleOfMovement = (this._sketch.map(this.lifeSpan,0,this._sketch.windowWidth,400.0,600.0) / this._sketch.windowWidth) * 90.0;
+            this.angleOfMovement = (this._sketch.map(this.currentAge,0,this._sketch.windowWidth,400.0,600.0) / this._sketch.windowWidth) * 90.0;
             
-            if (this.lifeSpan > this.maximumAge) {
-                this.size -=0.85;
-                this.thickness = this.size/10;
+            if (this.currentAge > this.maximumAge) {
+                this.currentSize -=0.85;
+                this.thickness = this.currentSize/10;
             } else {
-                if (this.size < this.fullSize) {
-                    this.size +=0.85;
-                    this.thickness = this.size/10;
+                if (this.currentSize < this.maxSize) {
+                    this.currentSize +=0.85;
+                    this.thickness = this.currentSize/10;
                 }
             }
     
-            this.isAlive = (this.size > 1);
+            this.isAlive = (this.currentSize > 1);
         }
     }
 
@@ -120,11 +120,11 @@ class Tree {
             this._drawInfoBox();
 
             // Draw a line 120 pixels
-            this._sketch.image(this.branch, 0, 0, this.thickness, -this.size);
+            this._sketch.image(this.branch, 0, 0, this.thickness, -this.currentSize);
             // Move to the end of that line
-            this._sketch.translate(0,-this.size);
+            this._sketch.translate(0,-this.currentSize);
             // Start the recursive branching!
-            this._createBranch(this.size, this.thickness);
+            this._createBranch(this.currentSize, this.thickness);
         }
     }
 
@@ -132,7 +132,7 @@ class Tree {
         const buffer = 10;
         this._sketch.fill(122);
         this._sketch.text("Max Age: " + this.maximumAge, this.thickness + buffer, -buffer*3);
-        this._sketch.text("Current Age: " + this.lifeSpan, this.thickness + buffer, -buffer);
+        this._sketch.text("Current Age: " + this.currentAge, this.thickness + buffer, -buffer);
     }
 
 }
