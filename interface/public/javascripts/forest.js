@@ -54,6 +54,9 @@ const forest = (sketch) => {
         xPos = sketch.random(0,sketch.windowWidth);
         yPos = sketch.random(sketch.windowHeight/2, sketch.windowHeight);
         trees.push(new Tree(sketch, xPos, yPos, sketch.random(100, sketch.windowHeight/2.10), data));
+        
+        // sort the trees back to front
+        trees.sort((a, b) => a.position.y - b.position.y);
     }
 
     sketch.createTree = (data) => {
