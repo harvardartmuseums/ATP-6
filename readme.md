@@ -2,6 +2,8 @@
 
 Another scrappy demo project by HAM DIET. This is another interation of the Art Forest project. This version was created for [ArtTechPsyche](https://arttechpsyche.org/) on March 24, 2023.
 
+![Computer rendering of abstract trees overlayed on a photograph of a museum gallery](https://user-images.githubusercontent.com/3187493/230933968-e39e6706-92dd-4e39-84a6-a85ea0fe508a.jpg)
+
 ## About
 
 The controller folder contains code for a custom controller built on an Arduino. 
