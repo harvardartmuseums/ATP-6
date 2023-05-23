@@ -8,7 +8,7 @@ Another scrappy demo project by HAM DIET. This is another interation of the Art 
 
 The `controller` folder contains code for a custom controller built on an Arduino. 
 
-![ATP-6-Controller-Circuit-Design](https://user-images.githubusercontent.com/3187493/231182086-0a2e2f09-ea9c-422f-824c-51202d57755a.png)
+![Tinkercad generated circuit diagram for the controller](https://user-images.githubusercontent.com/3187493/231182086-0a2e2f09-ea9c-422f-824c-51202d57755a.png)
 [Edit the diagram on Tinkercad](https://www.tinkercad.com/things/apwWpyJJ8s8?sharecode=rr6WXzOZs2JMFjJ2ONxHQaXK1VtDjIYqnlVVWrt_Cng)
 
 Parts list:
@@ -16,7 +16,13 @@ Parts list:
 * 5 - [Momentary Pushbutton](https://www.adafruit.com/product/1505)
 * 1 - [Arduino or clone](https://www.adafruit.com/product/3677)
 
+This is the button layout used for ATP-6.  
+
+![Drawing of the controller button layout used for ATP-6](controller/diagrams/built-controller.png)
+
 The `interface` folder contains code for web interface. This interface connects with the Arduino-based controller using the [Web Serial API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API).
+
+![Screenshot of the controller and interface webpages](interface/public/images/demo-atp-6-forest-interface.png)
 
 ## Setup
 
