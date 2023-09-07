@@ -212,10 +212,11 @@ class ManifestViewer {
       this.infoPanel.style.margin = '5px 0px 5px 0px';
       this.infoPanel.style.visibility = 'hidden';
 
+      // Start adding the controls to the viewer, top to bottom
+      // Order matters since the position of the annotation layer is absolute
       this.container.append(this.loader);
       this.container.append(this.toolbar);
       this.container.append(this.image);
-      this.container.append(this.infoPanel);
 
       let dragMove = d3.drag()
                   .on('end', this._dragEnded.bind(this))
@@ -259,6 +260,7 @@ class ManifestViewer {
           .attr('id', (d) => {return `${d.id}_sizer`})
           .call(dragResize);
                           
+      this.container.append(this.infoPanel);          
       this.parentElement.append(this.container);
   }
 
