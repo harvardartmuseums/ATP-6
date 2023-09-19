@@ -1,0 +1,200 @@
+{
+    "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+    "@id": "https:\/\/www.harvardartmuseums.org\/profile\/jeff_steward@harvard.edu\/mycollections\/7649\/atp-6-2\/iiif\/top",
+    "@type": "sc:Collection",
+    "label": "ATP-6",
+    "manifests": [
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/211111",
+            "@type": "sc:Manifest",
+            "label": "Bear and Human Skeleton"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/229049",
+            "@type": "sc:Manifest",
+            "label": "Seated Figures, Study for \"A Sunday Afternoon on the Island of La Grande Jatte\""
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/191065",
+            "@type": "sc:Manifest",
+            "label": "Landscape with Clouds"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/216289",
+            "@type": "sc:Manifest",
+            "label": "Todi Ragini, Illustration from a Ragamala (Garland of Melodies) Series"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/338203",
+            "@type": "sc:Manifest",
+            "label": "The Candlenut Tree (Aleurites Moluccana): A Botanical Study from the Collection of Major James Nathaniel Rind\r\n"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/6877",
+            "@type": "sc:Manifest",
+            "label": "Self-Portrait at Eleven Years Old"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/318040",
+            "@type": "sc:Manifest",
+            "label": "Strike with Fist"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/355765",
+            "@type": "sc:Manifest",
+            "label": "Tiger & Crocodile"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/183479",
+            "@type": "sc:Manifest",
+            "label": "River Landscape with a Church"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/352506",
+            "@type": "sc:Manifest",
+            "label": "Snake with a Butterfly"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/312049",
+            "@type": "sc:Manifest",
+            "label": "Plant and Insect Study: Chrysanthemum; Cardui Butterfly"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/211331",
+            "@type": "sc:Manifest",
+            "label": "Three Birds"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/320567",
+            "@type": "sc:Manifest",
+            "label": "Detroit (Ragsdale Beauty Shop)"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/95035",
+            "@type": "sc:Manifest",
+            "label": "Untitled"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/172369",
+            "@type": "sc:Manifest",
+            "label": "Goggle-eyed Sea Bream and Bamboo Grass, from an untitled series known as Large Fish"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/196997",
+            "@type": "sc:Manifest",
+            "label": "Jar with cobalt-blue splashes"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/206306",
+            "@type": "sc:Manifest",
+            "label": "New Year Print: The Monkey King (Bi Ma Wen), with a Small Monkey on His Shoulder, Recieving the Seal of an Official (a Red Seal Reading \"Feng Hou Gua Yin\")"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/97363",
+            "@type": "sc:Manifest",
+            "label": "Birch Tree in a Landscape"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/27601",
+            "@type": "sc:Manifest",
+            "label": "Large Dish with Flying Cranes"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/6604",
+            "@type": "sc:Manifest",
+            "label": "Charity, Organizations: United States. Massachusetts. Boston. Publicity for Social Work. (1) Letter Heads. (2) Inserts. (3) Subscription blanks: Children's Aid Association. Boston Society for the Care of Girls. Boston Children's Aid Society"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/99764",
+            "@type": "sc:Manifest",
+            "label": "Power of Death"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/230130",
+            "@type": "sc:Manifest",
+            "label": "The Infant Moses"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/352139",
+            "@type": "sc:Manifest",
+            "label": "Scissors"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/167822",
+            "@type": "sc:Manifest",
+            "label": "Bell Krater (mixing bowl for wine and water): Scene from a Comic Play"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/299964",
+            "@type": "sc:Manifest",
+            "label": "Devonport and Dockyard, Devonshire"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/198740",
+            "@type": "sc:Manifest",
+            "label": "Seven Insects"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/361378",
+            "@type": "sc:Manifest",
+            "label": "Still Life with Plums, White Plums, Peaches and Medlars"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/362148",
+            "@type": "sc:Manifest",
+            "label": "Buhl Inkstand"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/222835",
+            "@type": "sc:Manifest",
+            "label": "Death with Left Hand Raised"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/168614",
+            "@type": "sc:Manifest",
+            "label": "Solidus of Michael III and Theodora, Constantinople"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/152202",
+            "@type": "sc:Manifest",
+            "label": "Health, General: United States. U.S. Department of Agriculture. Composition of Food Materials: Chart 2. Eggs and Cheese.: Whole Egg. Egg White and Yolk. Cream Cheese. Cottage Cheese"
+        },
+        {
+            "@context": "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+            "@id": "https:\/\/iiif.harvardartmuseums.org\/manifests\/object\/321173",
+            "@type": "sc:Manifest",
+            "label": "Weaving Technique: A (Loom Detail)"
+        }
+    ]
+}

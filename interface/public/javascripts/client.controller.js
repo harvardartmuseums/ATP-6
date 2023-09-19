@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", event => {
     log  = document.getElementById("log");
 
     viewerContainer = document.getElementById("viewer");
-    // viewer = new ManifestViewer(viewerContainer, 'https://iiif.harvardartmuseums.org/collections/object?page=1');
     viewer = new ManifestViewer(viewerContainer, 'https://harvardartmuseums.org/profile/jeff_steward@harvard.edu/mycollections/7649/atp-6-2/iiif/top');
 
     keyboard = new window.keypress.Listener();
@@ -20,6 +19,17 @@ document.addEventListener("DOMContentLoaded", event => {
         toggleHeader();
         viewer.toggleToolbar();
     });
+    keyboard.simple_combo("shift i", () => {
+        viewer.toggleInfoPanel();
+    });
+
+    socket.on('set-collection', packet => {
+        viewer.setPacket(packet.url);
+    });
+
+    socket.on('set-time-of-day', packet => {
+        // change the background
+    })
 });
 
 async function connectController() {
@@ -143,6 +153,7 @@ class ManifestViewer {
       this._maxScaleWidth = 100;
       this._previousScaleValue = 0;
 
+      this._isCasting = false;
       this._currentManifestIndex = 0;
       this._collection;
       
@@ -155,6 +166,7 @@ class ManifestViewer {
       this.loader;
       this.image;
       this.annotationLayer;
+      this.messageLayer;
       this.infoPanel;
       
       this._createElements();
@@ -162,6 +174,8 @@ class ManifestViewer {
   }
 
   _createElements() {
+      DOMParser
+
       this.container = document.createElement('section');
       this.container.style.position = 'relative';
 
@@ -175,7 +189,8 @@ class ManifestViewer {
       this.buttonNext.innerHTML = '&gt;&gt;&gt;';
       this.buttonNext.setAttribute('id', `${this.id}_buttonNext`);
       this.buttonNext.style.background = 'none';
-      this.buttonNext.style.color = '#ffffff';        
+      this.buttonNext.style.color = '#ffffff';      
+      this.buttonNext.style.cursor = 'pointer';  
       this.buttonNext.addEventListener('click', this.nextImage.bind(this));
       
       this.buttonPrevious = document.createElement('button');
@@ -183,6 +198,7 @@ class ManifestViewer {
       this.buttonPrevious.setAttribute('id', `${this.id}_buttonPrevious`);
       this.buttonPrevious.style.background = 'none';
       this.buttonPrevious.style.color = '#ffffff';
+      this.buttonPrevious.style.cursor = 'pointer';  
       this.buttonPrevious.addEventListener('click', this.previousImage.bind(this));
       
       this.buttonCast = document.createElement('button');
@@ -190,6 +206,7 @@ class ManifestViewer {
       this.buttonCast.setAttribute('id', `${this.id}_buttonPrevious`);
       this.buttonCast.style.background = 'none';
       this.buttonCast.style.color = '#ffffff';
+      this.buttonCast.style.cursor = 'pointer';  
       this.buttonCast.style.marginLeft = '10px';
       this.buttonCast.addEventListener('click', this.cast.bind(this));
       
@@ -211,6 +228,21 @@ class ManifestViewer {
       this.infoPanel.style.width = '50%';
       this.infoPanel.style.margin = '5px 0px 5px 0px';
       this.infoPanel.style.visibility = 'hidden';
+
+      this.messageLayer = document.createElement('div');
+      this.messageLayer.style.background = '#222222';
+      this.messageLayer.style.position = 'fixed';
+      this.messageLayer.style.top = 0;
+      this.messageLayer.style.left = 0;
+      this.messageLayer.style.width = '100%';
+      this.messageLayer.style.height = '100vh';      
+      this.messageLayer.style.display = 'flex';
+      this.messageLayer.style['flex-direction'] = 'column';
+      this.messageLayer.style['justify-content'] = 'center';
+      this.messageLayer.style['align-items'] = 'center';
+      this.messageLayer.style.opacity = 0.0;
+      this.messageLayer.style['z-index'] = -1000;
+    //   this.messageLayer.style.visibility = 'hidden';
 
       // Start adding the controls to the viewer, top to bottom
       // Order matters since the position of the annotation layer is absolute
@@ -260,6 +292,7 @@ class ManifestViewer {
           .attr('id', (d) => {return `${d.id}_sizer`})
           .call(dragResize);
                           
+      this.container.append(this.messageLayer);
       this.container.append(this.infoPanel);          
       this.parentElement.append(this.container);
   }
@@ -277,6 +310,15 @@ class ManifestViewer {
   }
 
   _showImage(manifestUri) {
+          // turn off the loader animation
+          this.loader.style.visibility = 'visible';
+
+          // turn on the toolbar and image 
+          this.image.style.visibility = 'hidden';
+          this.toolbar.style.visibility = 'hidden';
+          this.infoPanel.style.visibility = 'hidden';
+          this.annotationLayer.style('visibility', 'hidden');
+
       manifesto.loadManifest(manifestUri).then((manifest) => {
           this.manifestUri = manifestUri
           this.manifest = manifest;
@@ -302,11 +344,11 @@ class ManifestViewer {
           this.image.onload = this._initializeAnnotations.bind(this);
           this.image.setAttribute('src', imageURL);
 
-          this._showMetadata(m);
+          this._initializeMetadataPanels(m);
       });
   }
 
-  _showMetadata(manifest) {
+  _initializeMetadataPanels(manifest) {
     let metadata = manifest.getMetadata();
     
     let description = '';
@@ -342,6 +384,8 @@ class ManifestViewer {
 
     this.infoPanel.innerHTML = `<p>${description}</p>`;
     this.infoPanel.append(qr);
+
+    this.messageLayer.innerHTML = `<h2 style='margin:120px'><i>${title}</i> <br/>went off to commune with the forest <br/>🍃🌲🌱🌰🐿️🌳</h2>`;
   }
 
   nextImage(e) {
@@ -471,15 +515,41 @@ class ManifestViewer {
   }
 
   cast() {
+    // TITLE is becoming one with the forest
+      this._isCasting = true;
+
       let data = {
-          action: 'cast',
-          packet: {
-              objectID: this.objectID,
-              annotations: this.annotations
-          }
+        action: 'cast',
+        packet: {
+            objectID: this.objectID,
+            createdate: new Date(),
+            annotations: this.annotations
+        }
       };
-      
+    
       socket.emit('take-action', data);
+
+      // Bring to front
+      this.messageLayer.style.zIndex = 1000;
+     
+      // Fade in
+      let t = anime.timeline({
+        targets: this.messageLayer
+      });
+      t.add({
+            opacity: 1.0,
+            duration: 1000,
+            easing: 'easeInQuint'
+        })
+        .add({
+            opacity: 0.0,
+            duration: 2000,
+            easing: 'easeOutQuint',
+            complete: (anim) => {
+                this.messageLayer.style.zIndex = -1000;
+                this._isCasting = false;
+            }
+        }, '+=5000');
   }
 
   move(element, direction, factor) {
@@ -540,11 +610,25 @@ class ManifestViewer {
     this._previousScaleValue = factor;
   }
 
+  setPacket(packetUri) {
+    this.packetUri = packetUri;
+    this._getCollection();
+  }
+
   toggleToolbar() {
     if (this.toolbar.style.display == 'flex') {
         this.toolbar.style.display = 'none';
     } else {
         this.toolbar.style.display = 'flex';
+    }
+    this._initializeAnnotations();
+  }
+
+  toggleInfoPanel() {
+    if (this.infoPanel.style.display == 'block') {
+        this.infoPanel.style.display = 'none';
+    } else {
+        this.infoPanel.style.display = 'block';
     }
   }
 

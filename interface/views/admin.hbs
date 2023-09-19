@@ -1,0 +1,148 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+<header class="bg-light p-4 mb-4">
+    <h1 class="display-5 fw-bold">MCP</h1>
+    <p class="lead">
+        {{title}}
+    </p> 
+</header>
+
+<section>
+<div class="container-fluid">
+    <div class="accordion accordion-flush" id="menu">    
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#stats" aria-expanded="false" aria-controls="flush-collapseOne">
+                    <h2>Statistics</h2>
+                 </button>
+            </h2>
+            <div class="accordion-collapse collapse" id="stats" data-bs-parent="#menu">
+                <div class="accordion-body d-grid gap-2 mb-4">           
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><span>Controllers: </span><span id="num-controllers">0</span></li>
+                        <li class="list-group-item"><span>Windows: </span><span id="num-windows">0</span></li>            
+                        <li class="list-group-item"><span>Tree Count: </span><span id="num-trees">0</span></li>
+                        <li class="list-group-item"><span>Time of Day: </span><span id="num-hour">0</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settings" aria-expanded="false" aria-controls="flush-collapseOne">
+                    <h2>Settings</h2>
+                 </button>
+            </h2>
+            <div class="accordion-collapse collapse" id="settings" data-bs-parent="#menu">
+                <div class="accordion-body d-grid gap-2 mb-4">  
+                    <label class="mt-4" for="collection-list">Collections</label>
+                    <select id="collection-list"></select>
+                    <button type="button" class="btn btn-lg btn-secondary" id="update-collection">Update Collection</button>
+
+                    <label class="mt-4" for="tree-density">Tree Density (current density is <span id="current-density"></span>)</label>
+                    <input type="range" min="0" max="100" class="border-0 custom-range" id="tree-density" list="values">
+                    <button type="button" class="btn btn-lg btn-secondary" id="update-density">Update Density to <b><span id="new-density"></span></b></button>
+                    <datalist id="values">
+                        <option value="0" label="0"></option>
+                        <option value="25" label="25"></option>
+                        <option value="50" label="50"></option>
+                        <option value="75" label="75"></option>
+                        <option value="100" label="100"></option>
+                    </datalist>   
+
+                    <hr>
+                    <button type="button" class="btn btn-lg btn-secondary" id="take-snapshot">Take Snapshot 📸</button>
+
+                    <hr>
+                    <button type="button" class="btn btn-lg btn-danger" id="clear-forest">⚠️🔥 Clear Forest 🔥⚠️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<section id="footer">
+</section>
+
+<script>
+    let socket = io('/mcp');  
+    let collectionList = document.getElementById('collection-list');
+
+    document.addEventListener("DOMContentLoaded", event => {
+        document.getElementById("clear-forest").onclick = clearForest;
+        document.getElementById("take-snapshot").onclick = takeSnapshot;
+        document.getElementById("update-collection").onclick = updateCollection;
+        document.getElementById("update-density").onclick = updateDensity;
+        document.getElementById("tree-density").oninput = (e) => {document.getElementById("new-density").innerText = e.target.value};
+        socket.on('start up', startUp);
+        socket.on('update', updateScreen); 
+    });
+
+    function startUp(settings) {
+        collectionList.replaceChildren();
+        settings.collections.forEach((collection,index) => {
+            let opt = document.createElement('option');
+            opt.innerText = collection.name;
+            opt.value = index;
+            opt.dataset.url = collection.url;
+
+            collectionList.appendChild(opt);
+        })
+
+        updateScreen(settings);
+    }
+
+    function updateScreen(settings) {
+        document.getElementById("num-controllers").innerText = settings.controllerCount;
+        document.getElementById("num-windows").innerText = settings.windowCount;
+        document.getElementById("num-trees").innerText = settings.treeCount;
+        document.getElementById("num-hour").innerText = settings.timeOfDay;
+        document.getElementById("current-density").innerText = settings.treeDensity;
+        document.getElementById("new-density").innerText = settings.treeDensity;
+        document.getElementById("tree-density").value = settings.treeDensity;
+    }
+
+    function sendMessage(message) {
+        let data = {
+            destination: message.destination,
+            action: message.action,
+            packet: message.packet
+        };
+        
+        socket.emit("take-action", data);
+    }    
+
+    function clearForest() {
+        sendMessage({"destination": "window", "action": "clear", "packet": {}})
+    }
+
+    function takeSnapshot() {
+        sendMessage({"destination": "window", "action": "snapshot", "packet": {}})
+    }
+
+    function updateCollection() {
+        let list = document.getElementById("collection-list");
+        let selected = list.options[list.selectedIndex];
+        sendMessage({
+            "destination": "controller", 
+            "action": "set-collection", 
+            "packet": {
+                "name": selected.text, 
+                "url": selected.dataset.url
+                }
+            });
+    }
+
+    function updateDensity() {
+        sendMessage({
+            "destination": "window",
+            "action": "set-density",
+            "packet": {
+                "density": document.getElementById("tree-density").value
+            }
+        })
+    }
+</script>

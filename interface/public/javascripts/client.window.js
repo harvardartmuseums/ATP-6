@@ -1,6 +1,8 @@
 let animation;
 let spacetime;
 let spaceTimeContainer;
+let ground;
+let height = 0;
 let socket = io("/window");
 
 document.addEventListener("DOMContentLoaded", event => { 
@@ -9,9 +11,50 @@ document.addEventListener("DOMContentLoaded", event => {
     spaceTimeContainer = document.getElementById("spacetime");    
     spacetime = new SpaceTime(spaceTimeContainer);
     
+    ground = document.getElementById("ground");
+
+    socket.on('start up', startUp);
+
     timer = window.setInterval(() => {spacetime.populate();spacetime._eraseColors();},30000);
 });
 
+function startUp(settings) {
+    setTimeOfDay(settings.timeOfDay);
+}
+
+function setTimeOfDay(hour) {
+    updateDimensions();
+    let factor = scale(hour, 0, 23, 1, height);
+
+    document.getElementById("darknessOverlayGround").style.opacity = Math.min((factor-(height/2)) / (height/2), 1);
+    document.getElementById("darknessOverlaySky").style.opacity = Math.min((factor-(height*7/10)) / (height-(height*7/10)), 1);
+    document.getElementById("horizonNight").style.opacity = (factor-(height*4/5)) / (height-(height*4/5));
+
+    document.getElementById("groundDistance").style.opacity = (factor/height+0.6);
+    document.getElementById("sky").style.opacity = Math.min((1-factor/height), 0.99);
+
+    if(factor > 0) {
+        if(factor > height/2) {
+            document.getElementById("horizon").style.opacity = (height-factor) / (height/2) + 0.2;
+        } else {
+            document.getElementById("horizon").style.opacity = Math.min(factor / (height/2), 0.99);
+        }
+    } 
+}
+
+function updateDimensions() {
+  if( typeof( window.innerWidth ) == 'number' ) {
+    height = window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    height = document.documentElement.clientHeight;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    height = document.body.clientHeight;
+  }
+}
+
+function scale (number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
 
 // Helper classes
 class SpaceTime {
@@ -77,10 +120,7 @@ class SpaceTime {
     _eraseColors() {
         let deadAge = this.counter - this.threshold;
         d3.selectAll("g[data-age='" + deadAge + "']")
-            .transition()
-                .style("opacity", "0")
-                .duration(1000)
-                .each("end", function() {d3.select(this).remove();});
+            .remove();
     }
 
     async populate() {

@@ -27,7 +27,7 @@ const forest = (sketch) => {
     sketch.draw = () => {
         sketch.clear();
 
-        sketch.drawGround(0, sketch.windowHeight/2, sketch.windowWidth, sketch.windowHeight/2, backgroundColor1, backgroundColor2);
+        // sketch.drawGround(0, sketch.windowHeight/2, sketch.windowWidth, sketch.windowHeight/2, backgroundColor1, backgroundColor2);
 
         for (let tree of trees) {
             tree.update();
@@ -63,6 +63,10 @@ const forest = (sketch) => {
         // incoming data looks like
         //   {leaf: "IMAGE_URL", branch: "IMAGE_URL", objectID: 000000}
         sketch.drawTree({leaf: data.annotations[0].imageUrl, branch: data.annotations[1].imageUrl, objectID: data.objectID});
+    }
+
+    sketch.setTimeOfDay = (hour) => {
+        // change the ground color
     }
 
     sketch.clearForest = () => {
