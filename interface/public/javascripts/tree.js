@@ -117,7 +117,7 @@ class Tree {
             this._sketch.resetMatrix();    
             this._sketch.translate(this.position.x,this.position.y);
             
-            this._drawInfoBox();
+            // this._drawInfoBox();
 
             // Draw a line 120 pixels
             this._sketch.image(this.branch, 0, 0, this.thickness, -this.currentSize);
