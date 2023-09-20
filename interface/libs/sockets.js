@@ -19,6 +19,13 @@ module.exports.listen = function(app){
         historySockets.emit('update', settings);
         mcpSockets.emit('update', settings);
 
+        socket.on('take-action', data => {
+            if (data.action === 'spawn') {
+                settings.addSun(data.packet);
+                mcpSockets.emit('update', settings);
+            }
+        });
+
         socket.on('disconnect', function() {
             settings.removeWindow(0);
             historySockets.emit('update', settings);
@@ -65,6 +72,10 @@ module.exports.listen = function(app){
                 if (data.destination === 'window') {
                     if (data.action === 'set-density') {
                         settings.treeDensity = data.packet.density;
+                        mcpSockets.emit('update', settings);
+                    }
+                    if (data.action === 'set-time-of-day') {
+                        settings.timeOfDay = data.packet.hour;
                         mcpSockets.emit('update', settings);
                     }
                     windowSockets.emit(data.action, data.packet);

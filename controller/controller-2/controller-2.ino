@@ -27,7 +27,7 @@
 
 //Misc.
 #define DEBOUNCE 300 //milliseconds of debounce
-#define TOLERANCE 1
+#define TOLERANCE 20
 #define STOP_CHAR "~"
 
 // Accelerometer 
@@ -45,7 +45,7 @@ String btnOutput[3] = {"B-0-A~", "B-1-A~", "B-2-A~"};
 // Analog Control
 int currentVals[1];
 int oldVals[1];
-int diffs[1];
+int diffs[1]; 
 String output[1];
 String aliases[1] = {"P-0-A-"};
 
@@ -98,7 +98,7 @@ void serial_input_task() {
 
   // read the input on analog pin 0:
   currentVals[0] = analogRead(A0);
-  currentVals[0] = map(currentVals[0], 0, 1023, 46, 0);
+  currentVals[0] = map(currentVals[0], 0, 1023, 1023, 0);
 
   delay(15);
   

@@ -10,6 +10,8 @@
 
 <section>
 <div class="container-fluid">
+    <button id="connectButton">Connect via Serial Port</button>
+    <div id="log"></div>
     <div class="accordion accordion-flush" id="menu">    
         <div class="accordion-item">
             <h2 class="accordion-header">
@@ -23,6 +25,7 @@
                         <li class="list-group-item"><span>Controllers: </span><span id="num-controllers">0</span></li>
                         <li class="list-group-item"><span>Windows: </span><span id="num-windows">0</span></li>            
                         <li class="list-group-item"><span>Tree Count: </span><span id="num-trees">0</span></li>
+                        <li class="list-group-item"><span>Sun Count: </span><span id="num-suns">0</span></li>
                         <li class="list-group-item"><span>Time of Day: </span><span id="num-hour">0</span></li>
                     </ul>
                 </div>
@@ -52,7 +55,11 @@
                         <option value="100" label="100"></option>
                     </datalist>   
 
+                    <label class="mt-4" for="time-of-day">Time of Day (current time is <span id="current-time"></span>)</label>
+                    <input type="range" min="0" max="23" class="border-0 custom-range" id="time-of-day" list="values">
+                    
                     <hr>
+                    <button type="button" class="btn btn-lg btn-secondary" id="toggle-tree-info">Toggle Info 🌲💾</button>
                     <button type="button" class="btn btn-lg btn-secondary" id="take-snapshot">Take Snapshot 📸</button>
 
                     <hr>
@@ -72,14 +79,95 @@
     let collectionList = document.getElementById('collection-list');
 
     document.addEventListener("DOMContentLoaded", event => {
+        document.getElementById("connectButton").onclick = connectController;
         document.getElementById("clear-forest").onclick = clearForest;
         document.getElementById("take-snapshot").onclick = takeSnapshot;
+        document.getElementById("toggle-tree-info").onclick = toggleTreeInfo;
         document.getElementById("update-collection").onclick = updateCollection;
         document.getElementById("update-density").onclick = updateDensity;
+        document.getElementById("time-of-day").oninput = (e) => {setTimeOfDay(e.target.value)};
         document.getElementById("tree-density").oninput = (e) => {document.getElementById("new-density").innerText = e.target.value};
         socket.on('start up', startUp);
         socket.on('update', updateScreen); 
     });
+
+    async function connectController() {
+        const port = await navigator.serial.requestPort();
+        await port.open({baudRate: 9600});
+
+        const decoder = new TextDecoderStream();
+            
+        port.readable.pipeTo(decoder.writable);
+
+        const inputStream = decoder.readable;
+        const reader = inputStream.getReader();
+        
+        let buffer = '';
+        while (true) {
+            const { value, done } = await reader.read();
+
+            if (value) {
+            buffer += value;
+            if (_.endsWith(buffer, "~")) {
+                processControllerOutput(buffer);
+                buffer = '';
+            } 
+            }
+            
+            if (done) {
+            console.log('[readLoop] DONE', done);
+            reader.releaseLock();
+            break;
+            }
+        }
+    }
+
+    function processControllerOutput(value) {
+        // values take the form: P-0-A-# || B-0-A || A-0-A-#
+        const v = _.trimEnd(value, "~");
+        const words = v.split("-");
+
+        {{!-- document.getElementById('log').innerHTML += `Controller value is ${value};`;     --}}
+
+        if (words[0] === 'B') {
+            switch (words[1]) {
+                case '0':
+                    // sendMessage({"action": "snapshot", "packet": {}});
+                    break;
+                case '1':
+                    break;
+                case '2':
+                    break;     
+                default:
+                    break;
+            }
+        } else if (words[0] === 'P') {
+            switch (words[1]) {
+                case '0':
+                    // move element in a direction by some amount
+                    // 64 -> flat
+                    // 3 -> tilt left
+                    // 2 -> tilt right
+                    // 1 -> tilt forward
+                    // 0 -> tilt back
+
+                    setTimeOfDay(Math.round(scale(Number(words[3]),0,1023,0,23)));
+                    break;
+                default:
+                    break;
+            }
+        } else if (words[0] === 'A') {
+            switch (words[1]) {
+                case '0':
+                    document.getElementById('log').innerHTML = words[3];
+                    break;
+                default:
+                    break;
+            }            
+        } else {
+
+        }        
+    }
 
     function startUp(settings) {
         collectionList.replaceChildren();
@@ -99,10 +187,13 @@
         document.getElementById("num-controllers").innerText = settings.controllerCount;
         document.getElementById("num-windows").innerText = settings.windowCount;
         document.getElementById("num-trees").innerText = settings.treeCount;
+        document.getElementById("num-suns").innerText = settings.sunCount;
         document.getElementById("num-hour").innerText = settings.timeOfDay;
         document.getElementById("current-density").innerText = settings.treeDensity;
         document.getElementById("new-density").innerText = settings.treeDensity;
         document.getElementById("tree-density").value = settings.treeDensity;
+        document.getElementById("time-of-day").value = settings.timeOfDay;
+        document.getElementById("current-time").innerText = settings.timeOfDay;
     }
 
     function sendMessage(message) {
@@ -115,12 +206,20 @@
         socket.emit("take-action", data);
     }    
 
+    function setTimeOfDay(hour) {
+        sendMessage({"destination": "window", "action": "set-time-of-day", "packet": {"hour": hour}})
+    }
+
     function clearForest() {
-        sendMessage({"destination": "window", "action": "clear", "packet": {}})
+        sendMessage({"destination": "window", "action": "clear", "packet": {}});
     }
 
     function takeSnapshot() {
-        sendMessage({"destination": "window", "action": "snapshot", "packet": {}})
+        sendMessage({"destination": "window", "action": "snapshot", "packet": {}});
+    }
+
+    function toggleTreeInfo() {
+        sendMessage({"destination": "window", "action": "toggle-info", "packet": {}});
     }
 
     function updateCollection() {
@@ -145,4 +244,8 @@
             }
         })
     }
+
+    function scale (number, inMin, inMax, outMin, outMax) {
+        return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }    
 </script>

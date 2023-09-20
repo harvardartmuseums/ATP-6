@@ -15,6 +15,10 @@ document.addEventListener("DOMContentLoaded", event => {
 
     socket.on('start up', startUp);
 
+    socket.on('set-time-of-day', packet => {
+        setTimeOfDay(packet.hour);
+    })    
+
     timer = window.setInterval(() => {spacetime.populate();spacetime._eraseColors();},30000);
 });
 
@@ -170,12 +174,15 @@ class SpaceTime {
                 .attr("transform", this._generateRandomTranslation.bind(this))
                 .delay(400);
             
-            // socket.emit("new sun", {
-            //     "url": artwork.records[0].url,
-            //     "title": artwork.records[0].title,
-            //     "objectid": artwork.records[0].objectid,
-            //     "colors": artwork.records[0].colors
-            // });         
+
+            socket.emit("take-action", {
+                action: "spawn",
+                packet: {
+                    title: data.records[0].title,
+                    objectid: data.records[0].objectid,
+                    colors: data.records[0].colors
+                } 
+            });       
 
             this.counter++;
         }          

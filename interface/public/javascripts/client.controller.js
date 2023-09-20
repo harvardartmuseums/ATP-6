@@ -26,10 +26,6 @@ document.addEventListener("DOMContentLoaded", event => {
     socket.on('set-collection', packet => {
         viewer.setPacket(packet.url);
     });
-
-    socket.on('set-time-of-day', packet => {
-        // change the background
-    })
 });
 
 async function connectController() {
@@ -85,10 +81,10 @@ function updateUI(value) {
             viewer.cast();
             break;
         case 'R':
-            sendMessage({"action": "clear", "packet": {}});
+            // sendMessage({"action": "clear", "packet": {}});
             break;
         case 'S':
-            sendMessage({"action": "snapshot", "packet": {}});
+            // sendMessage({"action": "snapshot", "packet": {}});
             break;     
         case 'N':
             viewer.nextImage();

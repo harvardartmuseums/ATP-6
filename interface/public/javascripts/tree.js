@@ -17,6 +17,7 @@ class Tree {
         this.currentAge = 0;
         this.maximumAge = 0;
         this.isAlive = false;
+        this.showInfo = true;
         this.data;
        
         sketch.loadImage(this.leafImageURL, img => {
@@ -117,8 +118,10 @@ class Tree {
             this._sketch.resetMatrix();    
             this._sketch.translate(this.position.x,this.position.y);
             
-            // this._drawInfoBox();
-
+            if (this.showInfo) {
+                this._drawInfoBox();
+            }
+            
             // Draw a line 120 pixels
             this._sketch.image(this.branch, 0, 0, this.thickness, -this.currentSize);
             // Move to the end of that line
@@ -126,6 +129,10 @@ class Tree {
             // Start the recursive branching!
             this._createBranch(this.currentSize, this.thickness);
         }
+    }
+
+    toggleInfo() {
+        this.showInfo = !this.showInfo;
     }
 
     _drawInfoBox() {

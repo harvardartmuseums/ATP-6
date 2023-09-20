@@ -9,6 +9,7 @@ module.exports = {
     timeOfDay: 0,
     treeDensity: 25,
     treeCount: 0,
+    sunCount: 0,
     trees: [],
     suns: [],
 
@@ -18,5 +19,6 @@ module.exports = {
     addWindow: function(id) {this.windowCount +=1},    
     removeWindow: function (id) {this.windowCount -=1;},
 
-    addTree: function(data) {this.trees.push(data); this.treeCount = this.trees.length}
+    addTree: function(data) {this.trees.push(data); this.treeCount = this.trees.length},
+    addSun: function(data) {this.suns.push(data); this.sunCount = this.suns.length}
 };

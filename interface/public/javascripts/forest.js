@@ -14,6 +14,7 @@ const forest = (sketch) => {
         socket.on("cast", sketch.createTree);
         socket.on("clear", sketch.clearForest);
         socket.on("snapshot", sketch.saveSnapshot);
+        socket.on("toggle-info", sketch.toggleInfo);
 
         sketch.textSize(20);
 
@@ -63,6 +64,12 @@ const forest = (sketch) => {
         // incoming data looks like
         //   {leaf: "IMAGE_URL", branch: "IMAGE_URL", objectID: 000000}
         sketch.drawTree({leaf: data.annotations[0].imageUrl, branch: data.annotations[1].imageUrl, objectID: data.objectID});
+    }
+
+    sketch.toggleInfo = () => {
+        for (let tree of trees) {
+            tree.toggleInfo();
+        }
     }
 
     sketch.setTimeOfDay = (hour) => {
