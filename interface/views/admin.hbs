@@ -144,13 +144,7 @@
         } else if (words[0] === 'P') {
             switch (words[1]) {
                 case '0':
-                    // move element in a direction by some amount
-                    // 64 -> flat
-                    // 3 -> tilt left
-                    // 2 -> tilt right
-                    // 1 -> tilt forward
-                    // 0 -> tilt back
-
+                    // Values coming out of the Pot run from 0->1023, map them to 0->23
                     setTimeOfDay(Math.round(scale(Number(words[3]),0,1023,0,23)));
                     break;
                 default:
@@ -159,7 +153,12 @@
         } else if (words[0] === 'A') {
             switch (words[1]) {
                 case '0':
-                    document.getElementById('log').innerHTML = words[3];
+                    // Use the accelerometer for something???
+                    // 64 -> flat
+                    // 3 -> tilt left
+                    // 2 -> tilt right
+                    // 1 -> tilt forward
+                    // 0 -> tilt back
                     break;
                 default:
                     break;
