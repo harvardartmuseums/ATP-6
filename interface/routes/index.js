@@ -30,7 +30,7 @@ router.get('/test', function(req, res, next) {
 router.post('/snapshots', function(req, res, next) {
   let base64Data = req.body.imgBase64.split(';base64,').pop();
   let filename = `ham-forest-${(Math.floor(new Date() / 1000)).toString(36)}.png`;
-  fs.writeFile(`${__dirname}/public/images/snapshots/${filename}`, base64Data, {encoding: 'base64'}, function(err) {
+  fs.writeFile(`/app/public/images/snapshots/${filename}`, base64Data, {encoding: 'base64'}, function(err) {
     console.log('done');
   })
   res.json({filename: filename, path: "/images/snapshots"});
