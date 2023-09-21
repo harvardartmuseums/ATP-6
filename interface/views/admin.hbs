@@ -147,11 +147,11 @@
         if (words[0] === 'B') {
             switch (words[1]) {
                 case '0':
-                    // sendMessage({"action": "snapshot", "packet": {}});
                     break;
                 case '1':
                     break;
                 case '2':
+                    sendMessage({"action": "snapshot", "packet": {}});
                     break;     
                 default:
                     break;

@@ -1,7 +1,8 @@
 module.exports = {
     collections: [
         {name: 'ATP-6', url:'https://harvardartmuseums.org/profile/jeff_steward@harvard.edu/mycollections/7649/atp-6-2/iiif/top'},
-        {name: 'Butterflies', url: 'https://harvardartmuseums.org/profile/jeff_steward@harvard.edu/mycollections/3841/butterfly/iiif/top'}
+        {name: 'Butterflies', url: 'https://harvardartmuseums.org/profile/jeff_steward@harvard.edu/mycollections/3841/butterfly/iiif/top'},
+        {name: 'MAN-17', url: 'https://harvardartmuseums.org/profile/jeff_steward@harvard.edu/mycollections/8547/man-17/iiif/top'}
     ],
     currentCollection: {},
     controllerCount: 0,
