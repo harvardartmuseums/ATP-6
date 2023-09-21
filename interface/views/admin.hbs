@@ -24,6 +24,7 @@
                         <li class="list-group-item"><span>Tree Count: </span><span id="num-trees">0</span></li>
                         <li class="list-group-item"><span>Sun Count: </span><span id="num-suns">0</span></li>
                         <li class="list-group-item"><span>Time of Day: </span><span id="num-hour">0</span></li>
+                        <li class="list-group-item"><span>Snapshot Count: </span><span id="num-snapshots">0</span></li>
                     </ul>
                 </div>
             </div>
@@ -64,6 +65,22 @@
                 </div>
             </div>
         </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#snapshots" aria-expanded="false" aria-controls="flush-collapseOne">
+                    <h2>Snapshot List</h2>
+                 </button>
+            </h2>
+            <div class="accordion-collapse collapse" id="snapshots" data-bs-parent="#menu">
+                <div class="accordion-body d-grid gap-2 mb-4">           
+                    <ul class="list-group list-group-flush" id="snapshot-list">
+                        <li class="list-group-item"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 </section>
@@ -74,6 +91,7 @@
 <script>
     let socket = io('/mcp');  
     let collectionList = document.getElementById('collection-list');
+    let snapshotList = document.getElementById('snapshot-list');
 
     document.addEventListener("DOMContentLoaded", event => {
         document.getElementById("connectButton").onclick = connectController;
@@ -190,6 +208,15 @@
         document.getElementById("tree-density").value = settings.treeDensity;
         document.getElementById("time-of-day").value = settings.timeOfDay;
         document.getElementById("current-time").innerText = settings.timeOfDay;
+        document.getElementById("num-snapshots").innerText = settings.snapshotCount;
+
+        snapshotList.replaceChildren();
+        settings.snapshots.forEach((snapshot, index) => {
+            let item = document.createElement('li');
+            item.innerText = `${snapshot.path}/${snapshot.filename}`;
+
+            snapshotList.appendChild(item);
+        });
     }
 
     function sendMessage(message) {

@@ -81,7 +81,22 @@ const forest = (sketch) => {
     }
 
     sketch.saveSnapshot = () => {
-        sketch.saveCanvas(canvas, snapshotFilename, 'png');
+        // sketch.saveCanvas(canvas, snapshotFilename, 'png');
+        let options = {
+            foreignObjectRendering: true,
+            width: sketch.windowWidth-1,
+            height: sketch.windowHeight-1,
+            x: 1,
+            y: 1
+        };
+        html2canvas(document.body, options).then(function(canvas) {
+            let data = { 
+                imgBase64: canvas.toDataURL("image/png")
+             };
+            sketch.httpPost("/snapshots","json", data, function(result) {
+                socket.emit("take-action", {action: "snapshot complete", packet: result} )
+            });
+        }); 
     }
 
     sketch.keyTyped = () => {

@@ -10,8 +10,10 @@ module.exports = {
     treeDensity: 25,
     treeCount: 0,
     sunCount: 0,
+    snapshotCount: 0,
     trees: [],
     suns: [],
+    snapshots: [],
 
     addController: function(id) {this.controllerCount +=1},    
     removeController: function (id) {this.controllerCount -=1;},
@@ -20,5 +22,6 @@ module.exports = {
     removeWindow: function (id) {this.windowCount -=1;},
 
     addTree: function(data) {this.trees.push(data); this.treeCount = this.trees.length},
-    addSun: function(data) {this.suns.push(data); this.sunCount = this.suns.length}
+    addSun: function(data) {this.suns.push(data); this.sunCount = this.suns.length},
+    addSnapshot: function(data) {this.snapshots.push(data); this.snapshotCount = this.snapshots.length}
 };

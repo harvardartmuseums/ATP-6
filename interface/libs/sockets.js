@@ -1,9 +1,10 @@
 
 const { Server } = require('socket.io');
-const settings = require('./settings');
 
-module.exports.listen = function(app){
-    const io = new Server(app);
+module.exports.listen = function(server, app){
+    const io = new Server(server);
+
+    let settings = app.get('settings');
 
     let windowSockets = io.of('/window');
     let controllerSockets = io.of('/controller');
@@ -22,6 +23,9 @@ module.exports.listen = function(app){
         socket.on('take-action', data => {
             if (data.action === 'spawn') {
                 settings.addSun(data.packet);
+                mcpSockets.emit('update', settings);
+            } else if (data.action === 'snapshot complete') {
+                settings.addSnapshot(data.packet);
                 mcpSockets.emit('update', settings);
             }
         });
