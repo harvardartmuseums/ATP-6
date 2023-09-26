@@ -15,6 +15,7 @@ const forest = (sketch) => {
         socket.on("clear", sketch.clearForest);
         socket.on("snapshot", sketch.saveSnapshot);
         socket.on("toggle-info", sketch.toggleInfo);
+        socket.on("wind", sketch.setWind);
 
         sketch.textSize(20);
 
@@ -67,6 +68,12 @@ const forest = (sketch) => {
     sketch.toggleInfo = () => {
         for (let tree of trees) {
             tree.toggleInfo();
+        }
+    }
+
+    sketch.setWind = (data) => {
+        for (let tree of trees) {
+            tree.setWind(data.wind);
         }
     }
 

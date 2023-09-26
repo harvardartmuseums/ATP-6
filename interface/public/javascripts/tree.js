@@ -1,4 +1,7 @@
 class Tree {
+    // X, Y => Position
+    // Size => maximum height
+    // Data => object ID, leaf and branch images
     constructor(sketch, x, y, size, data) {
         this._sketch = sketch;
 
@@ -10,8 +13,10 @@ class Tree {
         this.thickness = size/10;
         this.leafImageURL = data.leaf;
         this.branchImageURL = data.branch;
-        this.lean = sketch.random(0.30, 7.0);
-        this.rotationFactor = sketch.random(30.0, 65.0);
+        this.maxLean = sketch.random(1.0, 6.0);
+        this.currentLean = this.maxLean;
+        this.leanDirection = sketch.random([-1, 1]);
+        this.wind = 0.0;
         this.theta = 0.0;
         this.angleOfMovement = 0.0;
         this.growthRate = 0.85; // Or rate of aging
@@ -54,7 +59,7 @@ class Tree {
         // Here, ours is when the length of the branch is 10 pixels or less
         if (h > 10) {
           this._sketch.push();    // Save the current state of transformation (i.e. where are we now)
-          this._sketch.rotate(this.theta);   // Rotate by theta      
+          this._sketch.rotate(this.theta+this.wind);   // Rotate by theta      
           this._sketch.image(this.branch, 0, 0, t, -h);
           this._sketch.translate(0, -h); // Move to the end of the branch
           this._createBranch(h, t);       // Ok, now call myself to draw two new branches!!
@@ -62,7 +67,7 @@ class Tree {
           
           if (h < (this.currentSize*0.66)*0.66) {
             this._sketch.push();
-            this._sketch.rotate(this.theta);
+            this._sketch.rotate(this.theta+this.wind);
             this._sketch.translate(0, -h);
             this._sketch.image(this.leaf, 0, 0, 2*this.thickness, 2*this.thickness);
             this._sketch.pop();
@@ -70,7 +75,7 @@ class Tree {
           
           // Repeat the same thing, only branch off to the "left" this time!
           this._sketch.push();
-          this._sketch.rotate(-this.theta/this.lean);
+          this._sketch.rotate(-(this.theta-this.wind)/this.currentLean);
           this._sketch.image(this.branch, 0, 0, t, -h);
           this._sketch.translate(0, -h);
           this._createBranch(h, t);
@@ -78,7 +83,7 @@ class Tree {
           
           if (h < (this.currentSize*0.66)*0.66) {
             this._sketch.push();
-            this._sketch.rotate(-this.theta/this.lean);
+            this._sketch.rotate(-(this.theta-this.wind)/this.currentLean);
             this._sketch.translate(0, -h);
             this._sketch.image(this.leaf, 0, 0, 1.25*this.thickness, 1.25*this.thickness);
             this._sketch.pop();
@@ -91,10 +96,16 @@ class Tree {
             if (this.isAlive) {
                 // this.currentAge +=0.5;
                 this.currentAge +=this.growthRate;
-                
+
+                // Let's pick an angle 0 to 90 degrees based on the mouse position
+                // let a = (map(mouseX,0,width,500.0,600.0) / width) * 90.0;
                 // This controls the pace of spread
                 this.angleOfMovement = (this._sketch.map(this.currentAge,0,this._sketch.windowWidth,400.0,600.0) / this._sketch.windowWidth) * 90.0;
-                
+                this.angleOfMovement *= this.leanDirection;
+
+                // Convert it to radians
+                this.theta = this._sketch.radians(this.angleOfMovement);    
+
                 if (this.currentAge > this.maximumAge) {
                     this.currentSize -=this.growthRate;
                     this.thickness = this.currentSize/10;
@@ -116,12 +127,6 @@ class Tree {
     render() {
         if (this.ready) {
             if (this.isAlive) {
-           
-                // Let's pick an angle 0 to 90 degrees based on the mouse position
-                // let a = (map(mouseX,0,width,500.0,600.0) / width) * 90.0;
-                // Convert it to radians
-                this.theta = this._sketch.radians(this.angleOfMovement);    
-                
                 this._sketch.resetMatrix();    
                 this._sketch.translate(this.position.x,this.position.y);
                 
@@ -147,6 +152,10 @@ class Tree {
 
     toggleInfo() {
         this.showInfo = !this.showInfo;
+    }
+
+    setWind(d) {
+        this.wind = this._sketch.radians(d);
     }
 
     _drawInfoBox() {

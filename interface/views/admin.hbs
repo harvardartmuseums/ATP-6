@@ -166,14 +166,25 @@
                     break;
             }
         } else if (words[0] === 'A') {
-            switch (words[1]) {
+            // Use the accelerometer for something???
+            switch (words[3]) {
+                // 0 -> tilt back
                 case '0':
-                    // Use the accelerometer for something???
-                    // 64 -> flat
-                    // 3 -> tilt left
-                    // 2 -> tilt right
-                    // 1 -> tilt forward
-                    // 0 -> tilt back
+                    break;
+                // 1 -> tilt forward
+                case '1':
+                    break;
+                // 2 -> tilt right                
+                case '2':
+                    sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 10}});
+                    break;                    
+                // 3 -> tilt left
+                case '3':
+                    sendMessage({"destination": "window", "action": "wind", "packet": {"wind": -10}});
+                    break;               
+                // 64 -> flat
+                case '64':
+                    sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 0}});
                     break;
                 default:
                     break;
