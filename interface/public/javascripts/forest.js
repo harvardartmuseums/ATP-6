@@ -32,9 +32,7 @@ const forest = (sketch) => {
 
         for (let tree of trees) {
             tree.update();
-            if (tree.isAlive) {
-                tree.render();
-            }
+            tree.render();
         }
     }
 
