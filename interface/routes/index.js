@@ -8,23 +8,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/controller', function(req, res, next) {
-  res.render('controller', { title: 'The Controller | Art Forest | MAN-17| Harvard Art Museums' });
+  res.render('controller', { title: 'The Controller | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.get('/forest', function(req, res, next) {
-  res.render('forest', { title: 'The Forest | Art Forest | MAN-17| Harvard Art Museums' });
+  res.render('forest', { title: 'The Forest | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.get('/history', function(req, res, next) {
-  res.render('history', { title: 'The History | Art Forest | MAN-17| Harvard Art Museums' });
+  res.render('history', { title: 'The History | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.get('/mcp', function(req, res, next) {
-  res.render('admin', {layout: 'layout-admin', title: 'The MCP | Art Forest | MAN-17| Harvard Art Museums' });
+  res.render('admin', {layout: 'layout-admin', title: 'The MCP | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.get('/test', function(req, res, next) {
-  res.render('test', { title: 'Test | Art Forest | MAN-17| Harvard Art Museums' });
+  res.render('test', { title: 'Test | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.post('/snapshots', function(req, res, next) {
