@@ -16,8 +16,9 @@ class Tree {
         this.maxLean = sketch.random(1.0, 6.0);
         this.currentLean = this.maxLean;
         this.leanDirection = sketch.random([-1, 1]);
-        this.wind = 0.0;
-        this.theta = 0.0;
+        this.wind = 0.0;    // In radians
+        this.windFactor = 0.0;
+        this.theta = 0.0;   // In radians
         this.angleOfMovement = 0.0;
         this.growthRate = 0.85; // Or rate of aging
         this.currentAge = 0;
@@ -105,6 +106,13 @@ class Tree {
 
                 // Convert it to radians
                 this.theta = this._sketch.radians(this.angleOfMovement);    
+
+                if (this.wind != 0) {
+                    if (this._sketch.frameCount % 30 == 0) {
+                        this.windFactor = this._sketch.radians(this._sketch.random(-1, 1))/30;
+                    }
+                    this.wind += this.windFactor;
+                } 
 
                 if (this.currentAge > this.maximumAge) {
                     this.currentSize -=this.growthRate;

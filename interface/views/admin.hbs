@@ -138,7 +138,7 @@
     }
 
     function processControllerOutput(value) {
-        // values take the form: P-0-A-# || B-0-A || A-0-A-#
+        // values take the form: P-0-A-# || B-0-A || A-0-A-# || A-0-T
         const v = _.trimEnd(value, "~");
         const words = v.split("-");
 
@@ -147,11 +147,12 @@
         if (words[0] === 'B') {
             switch (words[1]) {
                 case '0':
+                    toggleTreeInfo();
                     break;
                 case '1':
                     break;
                 case '2':
-                    sendMessage({"destination": "window", "action": "snapshot", "packet": {}});
+                    takeSnapshot();
                     break;     
                 default:
                     break;
@@ -167,28 +168,33 @@
             }
         } else if (words[0] === 'A') {
             // Use the accelerometer for something???
-            switch (words[3]) {
-                // 0 -> tilt back
-                case '0':
-                    break;
-                // 1 -> tilt forward
-                case '1':
-                    break;
-                // 2 -> tilt right                
-                case '2':
-                    sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 10}});
-                    break;                    
-                // 3 -> tilt left
-                case '3':
-                    sendMessage({"destination": "window", "action": "wind", "packet": {"wind": -10}});
-                    break;               
-                // 64 -> flat
-                case '64':
-                    sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 0}});
-                    break;
-                default:
-                    break;
-            }            
+            if (words[2] == 'A') {
+                switch (words[3]) {
+                    // 0 -> tilt back
+                    case '0':
+                        break;
+                    // 1 -> tilt forward
+                    case '1':
+                        break;
+                    // 2 -> tilt right                
+                    case '2':
+                        sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 10}});
+                        break;                    
+                    // 3 -> tilt left
+                    case '3':
+                        sendMessage({"destination": "window", "action": "wind", "packet": {"wind": -10}});
+                        break;               
+                    // 64 -> flat
+                    case '64':
+                        sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 0}});
+                        break;
+                    default:
+                        break;
+                }    
+            }
+            if (words[2] == 'T') {
+                // Do something with taps
+            }        
         } else {
 
         }        
