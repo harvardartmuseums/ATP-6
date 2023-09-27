@@ -16,6 +16,7 @@ const forest = (sketch) => {
         socket.on("snapshot", sketch.saveSnapshot);
         socket.on("toggle-info", sketch.toggleInfo);
         socket.on("wind", sketch.setWind);
+        socket.on("shake", sketch.shakeTrees);
 
         sketch.textSize(20);
 
@@ -77,6 +78,10 @@ const forest = (sketch) => {
         }
     }
 
+    sketch.shakeTrees = () => {
+
+    }
+    
     sketch.setTimeOfDay = (hour) => {
         // change the ground color
     }

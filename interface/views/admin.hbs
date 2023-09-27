@@ -194,6 +194,7 @@
             }
             if (words[2] == 'T') {
                 // Do something with taps
+                sendMessage({"destination": "window", "action": "shake", "packet": {}});
             }        
         } else {
 
