@@ -34,7 +34,7 @@
 MMA8452Q accel; // Default MMA8452Q object create. (Address = 0x1D)
 byte currentAccelval;
 byte oldAccelVal;
-String accelAlias = "A-0-A-";
+String accelAlias[2] = {"A-0-A-", "A-0-T~"};
 String accelOutput = "";
 
 
@@ -119,11 +119,17 @@ void serial_input_task() {
 
 void accel_task() {
   if (accel.available()) { 
+    if (accel.readTap() > 0) {
+      accelOutput = accelAlias[1];
+      Serial.print(accelOutput);
+      Serial.flush();
+    }
+
     currentAccelval = accel.readPL();
     if (currentAccelval != oldAccelVal) {
       oldAccelVal = currentAccelval;
 
-      accelOutput = accelAlias;
+      accelOutput = accelAlias[0];
       accelOutput.concat(currentAccelval);
       accelOutput.concat(STOP_CHAR);      
       Serial.print(accelOutput);
