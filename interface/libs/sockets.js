@@ -17,7 +17,6 @@ module.exports.listen = function(server, app){
         socket.emit('start up', settings);
         
         settings.addWindow(0);
-        historySockets.emit('update', settings);
         mcpSockets.emit('update', settings);
 
         socket.on('take-action', data => {
@@ -27,12 +26,12 @@ module.exports.listen = function(server, app){
             } else if (data.action === 'snapshot complete') {
                 settings.addSnapshot(data.packet);
                 mcpSockets.emit('update', settings);
+                historySockets.emit('update', settings);
             }
         });
 
         socket.on('disconnect', function() {
             settings.removeWindow(0);
-            historySockets.emit('update', settings);
             mcpSockets.emit('update', settings);
             console.log('screen socket disconnect')
         });
@@ -44,7 +43,6 @@ module.exports.listen = function(server, app){
         socket.emit('start up', settings);
 
         settings.addController(0);
-        historySockets.emit('update', settings);
         mcpSockets.emit('update', settings);
 
         socket.on('take-action', data => {
@@ -58,14 +56,13 @@ module.exports.listen = function(server, app){
 
         socket.on('disconnect', function() {
             settings.removeController(0);
-            historySockets.emit('update', settings);
             mcpSockets.emit('update', settings);
             console.log('controller socket disconnect')
         });
     });
     
     historySockets.on('connection', function(socket) {
-        historySockets.emit('update', settings);
+        socket.emit('start up', settings);
     });
 
     mcpSockets.on('connection', function(socket) {

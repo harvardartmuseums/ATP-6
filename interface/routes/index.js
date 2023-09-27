@@ -16,7 +16,7 @@ router.get('/forest', function(req, res, next) {
 });
 
 router.get('/history', function(req, res, next) {
-  res.render('history', { title: 'The History | Art Forest | MAN-17 | Harvard Art Museums' });
+  res.render('history', {layout: 'layout-admin', title: 'The History | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.get('/mcp', function(req, res, next) {
@@ -25,6 +25,10 @@ router.get('/mcp', function(req, res, next) {
 
 router.get('/test', function(req, res, next) {
   res.render('test', { title: 'Test | Art Forest | MAN-17 | Harvard Art Museums' });
+});
+
+router.get('/snapshots', function(req, res, next) {
+  res.render('snapshots', {layout: 'layout-admin', title: 'The Photo Album | Art Forest | MAN-17 | Harvard Art Museums' });
 });
 
 router.post('/snapshots', function(req, res, next) {
