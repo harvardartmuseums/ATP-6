@@ -38,7 +38,12 @@
             </h2>
             <div class="accordion-collapse collapse" id="settings" data-bs-parent="#menu">
                 <div class="accordion-body d-grid gap-2 mb-4">  
-                    <label class="mt-4" for="collection-list">Collections</label>
+                    <label class="mt-4" for="new-collection">Add Collection</label>
+                    URL <input id="new-collection-url">
+                    Name <input id="new-collection-name">
+                    <button type="button" class="btn btn-lg btn-secondary" id="add-collection">Add Collection</button>
+
+                    <label class="mt-4" for="collection-list">Collections List</label>
                     <select id="collection-list"></select>
                     <button type="button" class="btn btn-lg btn-secondary" id="update-collection">Update Collection</button>
 
@@ -99,6 +104,7 @@
         document.getElementById("take-snapshot").onclick = takeSnapshot;
         document.getElementById("toggle-tree-info").onclick = toggleTreeInfo;
         document.getElementById("update-collection").onclick = updateCollection;
+        document.getElementById("add-collection").onclick = addCollectionToList;
         document.getElementById("update-density").onclick = updateDensity;
         document.getElementById("time-of-day").oninput = (e) => {setTimeOfDay(e.target.value)};
         document.getElementById("tree-density").oninput = (e) => {document.getElementById("new-density").innerText = e.target.value};
@@ -235,6 +241,21 @@
 
             snapshotList.appendChild(item);
         });
+    }
+
+    function addCollectionToList() {
+        let url = document.getElementById("new-collection-url");
+        let name = document.getElementById("new-collection-name");
+        if (url.value != '' && name.value != '') {
+            let opt = document.createElement('option');
+            opt.innerText = name.value;
+            opt.dataset.url = url.value;
+
+            collectionList.appendChild(opt);
+            
+            url.value = "";
+            name.value = "";
+        }
     }
 
     function sendMessage(message) {
