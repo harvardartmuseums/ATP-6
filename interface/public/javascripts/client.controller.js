@@ -78,13 +78,13 @@ function updateUI(value) {
   if (words[0] === 'B') {
     switch (words[2]) {
         case 'C':
-            viewer.cast();
+            viewer.cast(1);
             break;
         case 'R':
-            // sendMessage({"action": "clear", "packet": {}});
+            viewer.cast(3);
             break;
         case 'S':
-            // sendMessage({"action": "snapshot", "packet": {}});
+            viewer.cast(2);
             break;     
         case 'N':
             viewer.nextImage();
@@ -199,12 +199,12 @@ class ManifestViewer {
       
       this.buttonCast = document.createElement('button');
       this.buttonCast.innerHTML = 'cast it to the wind';
-      this.buttonCast.setAttribute('id', `${this.id}_buttonPrevious`);
+      this.buttonCast.setAttribute('id', `${this.id}_buttonCast`);
       this.buttonCast.style.background = 'none';
       this.buttonCast.style.color = '#ffffff';
       this.buttonCast.style.cursor = 'pointer';  
       this.buttonCast.style.marginLeft = '10px';
-      this.buttonCast.addEventListener('click', this.cast.bind(this));
+      this.buttonCast.addEventListener('click', this.cast.bind(this, 3));
       
       this.toolbar.append(this.buttonPrevious);
       this.toolbar.append(this.buttonNext);
@@ -510,7 +510,7 @@ class ManifestViewer {
       this._moveAnnotationInbounds(`#${d.id}`);
   }
 
-  cast() {
+  cast(quantity) {
     // TITLE is becoming one with the forest
       this._isCasting = true;
 
@@ -522,8 +522,11 @@ class ManifestViewer {
             annotations: this.annotations
         }
       };
-    
-      socket.emit('take-action', data);
+
+      if (quantity == undefined) quantity = 1;
+      for (let i = 0; i < quantity; i++) {
+        socket.emit('take-action', data);        
+      }
 
       // Bring to front
       this.messageLayer.style.zIndex = 1000;
