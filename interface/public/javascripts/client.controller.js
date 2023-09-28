@@ -511,44 +511,46 @@ class ManifestViewer {
   }
 
   cast(quantity) {
-    // TITLE is becoming one with the forest
-      this._isCasting = true;
+      if (!this._isCasting) {
+        // TITLE is becoming one with the forest
+        this._isCasting = true;
 
-      let data = {
-        action: 'cast',
-        packet: {
-            objectID: this.objectID,
-            createdate: new Date(),
-            annotations: this.annotations
-        }
-      };
-
-      if (quantity == undefined) quantity = 1;
-      for (let i = 0; i < quantity; i++) {
-        socket.emit('take-action', data);        
-      }
-
-      // Bring to front
-      this.messageLayer.style.zIndex = 1000;
-     
-      // Fade in
-      let t = anime.timeline({
-        targets: this.messageLayer
-      });
-      t.add({
-            opacity: 1.0,
-            duration: 1000,
-            easing: 'easeInQuint'
-        })
-        .add({
-            opacity: 0.0,
-            duration: 2000,
-            easing: 'easeOutQuint',
-            complete: (anim) => {
-                this.messageLayer.style.zIndex = -1000;
-                this._isCasting = false;
+        let data = {
+            action: 'cast',
+            packet: {
+                objectID: this.objectID,
+                createdate: new Date(),
+                annotations: this.annotations
             }
-        }, '+=5000');
+        };
+
+        if (quantity == undefined) quantity = 1;
+        for (let i = 0; i < quantity; i++) {
+            socket.emit('take-action', data);        
+        }
+
+        // Bring to front
+        this.messageLayer.style.zIndex = 1000;
+        
+        // Fade in
+        let t = anime.timeline({
+            targets: this.messageLayer
+        });
+        t.add({
+                opacity: 1.0,
+                duration: 1000,
+                easing: 'easeInQuint'
+            })
+            .add({
+                opacity: 0.0,
+                duration: 2000,
+                easing: 'easeOutQuint',
+                complete: (anim) => {
+                    this.messageLayer.style.zIndex = -1000;
+                    this._isCasting = false;
+                }
+            }, '+=5000');
+    }
   }
 
   move(element, direction, factor) {
