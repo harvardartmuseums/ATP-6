@@ -99,10 +99,19 @@ const forest = (sketch) => {
             x: 1,
             y: 1
         };
+        
+        let timestamp = new Date();
+        document.getElementById("timestamp").innerText = timestamp.toLocaleString();
+        document.getElementById("timestamp").style["visibility"] = "";
+
         html2canvas(document.body, options).then(function(canvas) {
             let data = { 
+                timestamp: timestamp.toString(),
                 imgBase64: canvas.toDataURL("image/png")
-             };
+            };
+            
+            document.getElementById("timestamp").style["visibility"] = "hidden";
+            
             sketch.httpPost("/snapshots","json", data, function(result) {
                 socket.emit("take-action", {action: "snapshot complete", packet: result} )
             });

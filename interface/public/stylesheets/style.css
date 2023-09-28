@@ -62,6 +62,17 @@ button {
   position: fixed;
 }
 
+#timestamp {
+  position: absolute;
+  z-index: 50000;
+  bottom: 30px;
+  left: 30px;
+  font-family: Inconsolata, Lucida Console;
+  color: orangered;
+  text-shadow: 1px 1px black;
+  font-size: large;
+
+}
 canvas {
   position: absolute;
   z-index: 10000;

@@ -37,7 +37,7 @@ router.post('/snapshots', function(req, res, next) {
   fs.writeFile(`/app/public/images/snapshots/${filename}`, base64Data, {encoding: 'base64'}, function(err) {
     console.log('done');
   })
-  res.json({filename: filename, path: "/images/snapshots"});
+  res.json({filename: filename, path: "/images/snapshots", timestamp: req.body.timestamp});
 });
 
 module.exports = router;

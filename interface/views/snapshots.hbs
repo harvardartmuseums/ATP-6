@@ -40,7 +40,7 @@
         let imageURL = `${window.location.protocol}//${window.location.hostname}${snapshot.path}/${snapshot.filename}`
         
         let i = document.createElement('img');
-        i.className = 'float-start img-fluid w-50 p-3';
+        i.className = 'float-start img-fluid w-75 p-3';
         i.setAttribute('src', imageURL);
 
         let qr = document.createElement('span');
@@ -54,10 +54,14 @@
             correctLevel : QRCode.CorrectLevel.H
         });        
 
+        let timestamp = document.createElement('div');
+        timestamp.innerText = snapshot.timestamp;
+
         let item = document.createElement('li');
         item.className = 'list-group-item';
         item.appendChild(i);
         item.appendChild(qr);
+        item.appendChild(timestamp);
         document.getElementById("snapshots").appendChild(item);
     }
 </script>
