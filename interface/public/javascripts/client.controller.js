@@ -204,7 +204,7 @@ class ManifestViewer {
       this.buttonCast.style.color = '#ffffff';
       this.buttonCast.style.cursor = 'pointer';  
       this.buttonCast.style.marginLeft = '10px';
-      this.buttonCast.addEventListener('click', this.cast.bind(this, 3));
+      this.buttonCast.addEventListener('click', this.cast.bind(this, 1));
       
       this.toolbar.append(this.buttonPrevious);
       this.toolbar.append(this.buttonNext);
