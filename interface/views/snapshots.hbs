@@ -1,6 +1,6 @@
 <script src="javascripts/qrcode.min.js" type="text/javascript"></script>
 
-<header class="bg-dark p-4 mb-4">
+<header id="header" class="bg-dark p-4 mb-4">
     <h1 class="display-5 fw-bold">The Photo Album</h1>
     <p class="lead">
         {{title}}
@@ -19,11 +19,26 @@
 
 <script>
     let socket = io('/history');  
+    let keyboard;
    
     document.addEventListener("DOMContentLoaded", event => {
         socket.on('start up', initializeScreen); 
         socket.on('update', updateScreen); 
+
+        keyboard = new window.keypress.Listener();
+        keyboard.simple_combo("shift m", () => {
+            toggleHeader();
+        });        
     });
+
+    function toggleHeader() {
+        let header = document.getElementById('header');
+        if (header.style.display != 'none') {
+            header.style.display = 'none';
+        } else {
+            header.style.display = 'block';
+        }    
+    }
 
     function initializeScreen(settings) {
         settings.snapshots.forEach(s => {
