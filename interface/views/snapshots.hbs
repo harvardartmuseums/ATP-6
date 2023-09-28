@@ -5,10 +5,12 @@
     <p class="lead">
         {{title}}
     </p> 
+    <button id="connectButton">Connect via Serial Port</button>
+    <div id="log"></div>
 </header>
 
 <section>
-<div class="container-fluid">
+<div class="container-fluid p-4">
     <h2>Memories of 🌲🌳🌴 I’ve grown to know and 💖💓</h2>
 	<ul id="snapshots" class="list-group list-group-flush">
 	</ul>
@@ -16,7 +18,7 @@
 </section> 
 
 <section id="footer">
-    <div class="container-fluid">
+    <div class="container-fluid p-4">
         <h3>The End ⁉️</h3>
     </div>
 </section>
@@ -26,14 +28,112 @@
     let keyboard;
    
     document.addEventListener("DOMContentLoaded", event => {
+        document.getElementById('connectButton').onclick = connectController;
+
         socket.on('start up', initializeScreen); 
         socket.on('update', updateScreen); 
 
         keyboard = new window.keypress.Listener();
         keyboard.simple_combo("shift m", () => {
             toggleHeader();
+            toggleScrollbars();
         });        
     });
+
+    async function connectController() {
+        const port = await navigator.serial.requestPort();
+        await port.open({baudRate: 9600});
+
+        const decoder = new TextDecoderStream();
+            
+        port.readable.pipeTo(decoder.writable);
+
+        const inputStream = decoder.readable;
+        const reader = inputStream.getReader();
+        
+        let buffer = '';
+        while (true) {
+            const { value, done } = await reader.read();
+
+            if (value) {
+            buffer += value;
+            if (_.endsWith(buffer, "~")) {
+                processControllerOutput(buffer);
+                buffer = '';
+            } 
+            }
+            
+            if (done) {
+            console.log('[readLoop] DONE', done);
+            reader.releaseLock();
+            break;
+            }
+        }
+    }
+
+    function processControllerOutput(value) {
+        // values take the form: P-0-A-# || B-0-A || A-0-A-# || A-0-T
+        const v = _.trimEnd(value, "~");
+        const words = v.split("-");
+
+        {{!-- document.getElementById('log').innerHTML += `Controller value is ${value};`;     --}}
+
+        if (words[0] === 'B') {
+            switch (words[1]) {
+                case '0':
+                    window.scrollBy(0,-100);
+                    break;
+                case '1':
+                    window.scrollBy(0,100);
+                    break;
+                case '2':
+                    break;     
+                default:
+                    break;
+            }
+        } else if (words[0] === 'P') {
+            switch (words[1]) {
+                case '0':
+                    // Values coming out of the Pot run from 0->1023, map them to 0->23
+                    setTimeOfDay(Math.round(scale(Number(words[3]),0,1023,0,23)));
+                    break;
+                default:
+                    break;
+            }
+        } else if (words[0] === 'A') {
+            // Use the accelerometer for something???
+            if (words[2] == 'A') {
+                switch (words[3]) {
+                    // 0 -> tilt back
+                    case '0':
+                        break;
+                    // 1 -> tilt forward
+                    case '1':
+                        break;
+                    // 2 -> tilt right                
+                    case '2':
+                        sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 10}});
+                        break;                    
+                    // 3 -> tilt left
+                    case '3':
+                        sendMessage({"destination": "window", "action": "wind", "packet": {"wind": -10}});
+                        break;               
+                    // 64 -> flat
+                    case '64':
+                        sendMessage({"destination": "window", "action": "wind", "packet": {"wind": 0}});
+                        break;
+                    default:
+                        break;
+                }    
+            }
+            if (words[2] == 'T') {
+                // Do something with taps
+                sendMessage({"destination": "window", "action": "shake", "packet": {}});
+            }        
+        } else {
+
+        }        
+    }
 
     function toggleHeader() {
         let header = document.getElementById('header');
@@ -42,6 +142,14 @@
         } else {
             header.style.display = 'block';
         }    
+    }
+
+    function toggleScrollbars() {
+        if (document.body.style["overflow"] == "hidden") {
+            document.body.style["overflow"] = "auto";
+        } else {
+            document.body.style["overflow"] = "hidden";
+        }
     }
 
     function initializeScreen(settings) {
